@@ -325,11 +325,18 @@ What *is* here: the code, the rubric, the label-only blind gold set
 (`id` + labels + per-cell provenance, no text), the run metrics, and ten
 synthetic example rows.
 
-Two exceptions, both deliberate: `fewshot.py` carries seven short excerpts of
-real public posts, because the teacher prompt is not reproducible without them;
-and `data/corpus_lowercase_words.json` is a 14,967-word lowercase vocabulary
-derived from the corpus, which is a word list rather than text and is what the
-redactor needs to run.
+Two exceptions, both deliberate:
+
+- `fewshot.py` carries seven short excerpts of real public posts, because the
+  teacher prompt is not reproducible without them. The same seven appear inside
+  `prompts/system.txt`, which is that prompt. They are excluded from the sample
+  pools, so they are in neither training nor evaluation.
+- `data/corpus_lowercase_words.json` is a 14,967-word lowercase vocabulary
+  derived from the corpus. It is a word list rather than text, and it is what
+  the redactor needs in order to run at all.
+
+The short quoted phrases in `RUBRIC.md` are illustrative boundary cases, not
+excerpts.
 
 ### De-identification
 
