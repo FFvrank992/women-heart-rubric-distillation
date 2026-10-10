@@ -1,0 +1,42 @@
+# QLoRA training stack, verified 2026-10-08 on Windows 11 + RTX 4060 Laptop 8GB.
+#
+# Install on top of requirements.txt, into an environment that already has a
+# CUDA build of torch. This set was chosen to pull in neither a different
+# transformers nor a different torch than the one already present - worth
+# re-checking with `pip install --dry-run` before bumping any of them if the
+# environment is shared with anything else.
+#
+# Verified by `python smoke_train.py`: 4-bit NF4 kernels run on the GPU, LoRA
+# attaches, loss falls over 20 steps, 2.77 GiB peak on Qwen3-1.7B.
+
+peft==0.21.2
+trl==1.14.2
+bitsandbytes==0.50.2
+accelerate==1.15.0
+datasets==5.1.0
+
+# Already present, pinned here so the combination is recorded:
+# torch==2.14.0+cu126
+# transformers==5.17.0
+
+# Teacher annotation (installed earlier):
+# google-genai==2.25.0
+
+# --- Notes for anyone re-creating this ---
+#
+# bitsandbytes is the piece that breaks on Windows: a CPU-only wheel imports
+# cleanly and then fails at the first 4-bit forward pass. smoke_train.py checks
+# the kernels rather than the import for exactly that reason. If a future wheel
+# is CPU-only, WSL2 is the fallback.
+#
+# triton is absent, so torch prints a flop-counter warning at import. Harmless
+# here: it only affects flop counting and torch.compile, neither of which this
+# pipeline uses. Unsloth would need triton-windows.
+#
+# Set PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True before importing torch
+# (smoke_train.py does). At 8 GB the allocator otherwise fragments and OOMs well
+# below the real limit.
+#
+# Disable the NVIDIA driver's CUDA system-memory fallback. With it on, exceeding
+# VRAM silently spills to host RAM and training gets ~20x slower instead of
+# raising OutOfMemoryError, which is much harder to diagnose.

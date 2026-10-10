@@ -1,0 +1,107 @@
+{
+  "mode": "zero-short",
+  "model": "qwen3:4b",
+  "system_tokens": 142,
+  "rows": 100,
+  "seconds_per_post": 0.892,
+  "report": {
+    "speech_act": {
+      "excluded": 30,
+      "agreed": {
+        "n": 70,
+        "accuracy": 0.7429,
+        "macro_f1": 0.6072
+      },
+      "adjudicated": null,
+      "all": {
+        "n": 70,
+        "accuracy": 0.7429,
+        "macro_f1": 0.6072
+      },
+      "optimistic": true
+    },
+    "emotion": {
+      "excluded": 1,
+      "agreed": {
+        "n": 56,
+        "accuracy": 0.0893,
+        "macro_f1": 0.033
+      },
+      "adjudicated": {
+        "n": 43,
+        "accuracy": 0.1628,
+        "macro_f1": 0.1007
+      },
+      "all": {
+        "n": 99,
+        "accuracy": 0.1212,
+        "macro_f1": 0.0656
+      },
+      "optimistic": false
+    },
+    "care_experience": {
+      "excluded": 1,
+      "agreed": {
+        "n": 55,
+        "accuracy": 0.7273,
+        "macro_f1": 0.5668
+      },
+      "adjudicated": {
+        "n": 44,
+        "accuracy": 0.3864,
+        "macro_f1": 0.3005
+      },
+      "all": {
+        "n": 99,
+        "accuracy": 0.5758,
+        "macro_f1": 0.501
+      },
+      "optimistic": false
+    },
+    "subject": {
+      "excluded": 17,
+      "agreed": {
+        "n": 83,
+        "accuracy": 0.759,
+        "macro_f1": 0.7866
+      },
+      "adjudicated": null,
+      "all": {
+        "n": 83,
+        "accuracy": 0.759,
+        "macro_f1": 0.7866
+      },
+      "optimistic": false
+    },
+    "health_claim": {
+      "excluded": 65,
+      "agreed": {
+        "n": 35,
+        "accuracy": 0.7714,
+        "macro_f1": 0.5518
+      },
+      "adjudicated": null,
+      "all": {
+        "n": 35,
+        "accuracy": 0.7714,
+        "macro_f1": 0.5518
+      },
+      "optimistic": true
+    },
+    "womens_specific": {
+      "excluded": 10,
+      "agreed": {
+        "n": 90,
+        "accuracy": 0.8111,
+        "macro_f1": 0.7674
+      },
+      "adjudicated": null,
+      "all": {
+        "n": 90,
+        "accuracy": 0.8111,
+        "macro_f1": 0.7674
+      },
+      "optimistic": false
+    }
+  }
+}

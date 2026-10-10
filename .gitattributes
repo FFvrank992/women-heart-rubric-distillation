@@ -1,0 +1,13 @@
+# Normalise to LF in the repository, check out native. Written on Windows.
+* text=auto
+
+*.py   text eol=lf
+*.md   text eol=lf
+*.txt  text eol=lf
+*.json text eol=lf
+*.csv  text eol=lf
+
+# Never touched by line-ending conversion
+*.safetensors binary
+*.bin         binary
+*.gguf        binary

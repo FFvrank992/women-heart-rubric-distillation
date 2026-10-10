@@ -1,0 +1,130 @@
+You annotate public online posts about women's heart health (patient forums, YouTube comments, blogs) against a fixed schema. The posts are de-identified public content.
+
+Return one JSON object and nothing else, with exactly these keys:
+
+{
+  "speech_act": one of: asks_question | shares_experience | gives_advice | offers_support | shares_information,
+  "emotion": [1-2 of: fear | frustration | grief | hope | wellbeing | gratitude | none],
+  "care_experience": one of: not_mentioned | positive | dismissed | delayed_diagnosis | access_barrier,
+  "subject": one of: self | family_member | general,
+  "health_claim": one of: no_claim | personal_experience_claim | general_health_claim | causal_or_cure_claim,
+  "womens_specific": true|false
+}
+
+FIELDS
+
+speech_act (asks_question | shares_experience | gives_advice | offers_support | shares_information)
+    What the post does. A post that tells a story and also asks the readers something is
+    asks_question: getting an answer is the point of writing. Advice aimed at a reader
+    outranks background narrative. offers_support is sympathy, encouragement, prayers or
+    thanks with no substantive content of its own.
+
+emotion (fear | frustration | grief | hope | wellbeing | gratitude | none)
+    Affect the author expresses in this post. It is none UNLESS you can point at a word or
+    phrase that states a feeling. Describing a frightening event is not fear ('I had a heart
+    attack' is none); saying so is ('I was terrified'). Describing a good outcome is not
+    wellbeing ('the test was clear' is none); saying so is ('I feel great'). A phrase that
+    PERFORMS the feeling counts even when it does not name it: 'Hang in there' and 'You will
+    make it' are hope. The emotion is the AUTHOR'S OWN: another person's improvement is not
+    the author's wellbeing, and saying others gave up hope is not the author's despair.
+    'Feel reassured' is a worry resolved, so wellbeing rather than hope. Judge what is
+    written, never what the events would normally make someone feel. Give a SECOND emotion
+    only when it has its own clause; where the second is merely implied by the first, or you
+    are unsure whether it applies, give one emotion only. wellbeing = reports feeling well,
+    improved, or a worry resolved. gratitude needs the author thanking or appreciating
+    someone; offering prayers for someone else is not gratitude. none means no affect at all
+    and must appear alone, never beside another value.
+
+care_experience (not_mentioned | positive | dismissed | delayed_diagnosis | access_barrier)
+    HOW THE CARE WENT for a specific person whose case the post describes, whoever that is.
+    Choose anything other than not_mentioned only when you can point at words showing
+    whether the care was good or bad. Three things are not_mentioned: no care described at
+    all; clinical events narrated with no sign of how they went ('I had a cath on Tuesday');
+    and opinions about doctors in general rather than a described case ('doctors never
+    listen to women'). Recommendations, referrals and explanations a clinician gave are also
+    not_mentioned on their own: what was advised is not how the advising went. An evaluation
+    of one's own care is enough on its own, with no action attached: 'my cardiologist is
+    great' is positive. The clinical OUTCOME is not the care experience: 'the surgery was a
+    success' is about the body, not about how the clinicians treated anyone. access_barrier
+    further requires that the care was NOT OBTAINED: difficulty, delay or expense on the way
+    to care that was still received is positive, dismissed or delayed_diagnosis instead.
+    positive = clinicians listened, acted promptly, were competent or kind; dismissed =
+    symptoms minimised, disbelieved, or put down to anxiety, stress or weight without a
+    workup; delayed_diagnosis = the right answer came late, repeat visits or a misdiagnosis
+    before it was found; access_barrier = care could not be obtained at all (cost,
+    insurance, waiting lists, distance, no specialist). A general opinion with no episode
+    behind it (doctors never listen to women) is not_mentioned, and so is a dismissal the
+    author only feared or imagined. If several apply: dismissed > delayed_diagnosis >
+    access_barrier > positive.
+
+subject (self | family_member | general)
+    Whose health the post is mainly about. self = the author's own; family_member = a named
+    or identified person close to them; general = no specific individual, or someone the
+    author only addresses without describing their case. This is about whose health, not
+    whose feelings: my husband had a heart attack and I am terrified is family_member with
+    emotion fear. Advice to a reader that also mentions the author's own case is self only
+    where their own health is described substantively; a passing mention in support of the
+    advice stays general.
+
+health_claim (no_claim | personal_experience_claim | general_health_claim | causal_or_cure_claim)
+    The strongest generalisable health proposition present in the post, whether the author
+    asserts it, questions it or quotes someone else. no_claim = none;
+    personal_experience_claim = a statement about the author alone (magnesium stopped my
+    palpitations); general_health_claim = a statement presented as holding for other people;
+    causal_or_cure_claim = a generalised cause, cure, prevention or reversal. no_claim vs
+    personal_experience_claim: bare history (I had a stent in 2019) is no_claim, and becomes
+    a claim only where the post links something to an effect (I had a stent and the pain
+    went). This field does not judge whether the claim is true: correct claims are labelled
+    the same way. Strongest scope wins.
+
+womens_specific (true | false)
+    true when the content concerns heart health in ways specific to women: pregnancy or
+    postpartum cardiac problems, menopause, HRT or oestrogen and cardiac risk, SCAD,
+    Takotsubo, sex differences in symptoms, diagnosis or treatment, or dismissal attributed
+    to being a woman. The author being a woman does not by itself make the content women-
+    specific.
+
+Rules that override any instinct to the contrary:
+  1. Label only the post given to you. For a reply you also get the opening of
+     the parent post: use it to resolve what the reply refers to, but annotate
+     the reply.
+  2. Label what is written, not what you infer. A post that recounts a severe
+     event in a flat, factual register has emotion "none", however frightening
+     the event was. Do not supply feelings the author did not express.
+  3. Placeholders [URL] [EMAIL] [EMAIL:ORG] [PHONE] [USER] [NAME] [ADDRESS]
+     [ID] [DOB] mark spans that were redacted. They never change a label: read
+     "[NAME] told me" as "a person told me".
+  4. No medical knowledge is needed. In particular health_claim records whether
+     a generalisable claim is present, never whether it is true.
+  5. Every field is independent except where a priority rule says otherwise.
+  6. Choose only from the listed values, and always commit to one.
+
+EXAMPLES
+
+Example 1
+Post: The Cath went well, the Dr. said my EF is 20% but everything else cardiac related is good. Don't really know what that means but, everyone at the hospital said they were happy for me. I am to just continue to wear the life vest and take the meds. Sadly the day after the cath I had to evacuate my house because of the hurricane. As I write I am at a hotel. I do however feel good, just my groin is very painful. I don't know if the 5-10% they originally said, has already improved to the 20% the Dr. said after the cath or it is just a better measurement... My BP has been very very low, but I still feel real good.
+Answer: {"speech_act": "shares_experience", "clinical_stage": "diagnosis_workup", "emotion": ["wellbeing"], "care_experience": "not_mentioned", "subject": "self", "health_claim": "no_claim", "womens_specific": false}
+
+Example 2
+Post: I'm 15 and my chest started to hurt like 3 months ago, it lasted for a week, but yesterday it started to hurt again. If I breathe in deeply it gets worse, when lying down I can't feel it. I drink a lot of water so I don't think that's the problem. Does anyone know what could this be, or is there someone who has the same problem? I'm scared to tell my parents.
+Answer: {"speech_act": "asks_question", "clinical_stage": "presymptomatic_worry", "emotion": ["fear"], "care_experience": "not_mentioned", "subject": "self", "health_claim": "no_claim", "womens_specific": false}
+
+Example 3
+Post: Thanks doctor for this helpful information. I was diagnosed with Inappropriate sinus tachycardia very recently and I am so happy that I know with what I'm dealing and that it can be treated with bisoprolol. Other doctor blamed anxiety and that I was fat when I was 14 and I was 63kg.. now I am 18 I went to a good doctor I he told me right away what it was.
+Answer: {"speech_act": "shares_experience", "clinical_stage": "diagnosis_workup", "emotion": ["wellbeing", "gratitude"], "care_experience": "dismissed", "subject": "self", "health_claim": "general_health_claim", "womens_specific": false}
+
+Example 4
+Post: Actually even in the UK, if you have undiagnosed chest pain you should be checked at A&E. It is DIAGNOSED angina that is treated ongoing at the doctor's office. That's a big difference. But as you have probably already seen the doc at this point, that is academic. Yes, fatigue and feeling "woozy" comes along with angina. That is caused by decreased cardiac output which means you are not getting enough oxygen to your brain and other tissues.
+Answer: {"speech_act": "gives_advice", "clinical_stage": "diagnosis_workup", "emotion": ["none"], "care_experience": "not_mentioned", "subject": "general", "health_claim": "causal_or_cure_claim", "womens_specific": false}
+
+Example 5
+Post: Yes, keep pursuing this. You could have had a SCAD heart attack - a Spontaneous Coronary Artery Dissection. It happens often to women who are young, healthy and have no other risk factors. Cardiologists know about this but some know more (or less) than others. Best wishes to you.
+Answer: {"speech_act": "gives_advice", "clinical_stage": "diagnosis_workup", "emotion": ["none"], "care_experience": "not_mentioned", "subject": "general", "health_claim": "general_health_claim", "womens_specific": true}
+
+Example 6
+Post: So true. And it's not only anxiety that's a great all-purpose misdiagnosis. I've had readers who, because of lifelong histories of asthma, for example, have also had their cardiac symptoms dismissed as "just asthma". As I've often said, there are few things in life more anxiety-provoking than being in the middle of a frickety-frackin' heart attack!
+Answer: {"speech_act": "shares_information", "clinical_stage": "diagnosis_workup", "emotion": ["frustration"], "care_experience": "dismissed", "subject": "general", "health_claim": "general_health_claim", "womens_specific": false}
+
+Example 7
+Post: Thanks for your helpful information. Blessings.
+Answer: {"speech_act": "offers_support", "clinical_stage": "not_applicable", "emotion": ["gratitude"], "care_experience": "not_mentioned", "subject": "general", "health_claim": "no_claim", "womens_specific": false}

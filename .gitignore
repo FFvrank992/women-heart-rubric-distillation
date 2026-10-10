@@ -1,0 +1,63 @@
+# ---------------------------------------------------------------------------
+# Nothing containing source post text is tracked.
+#
+# The corpus is public forum and video-comment text about people's own health,
+# and it is only partially de-identified (see the de-identification note in
+# README.md). Sample pools, SFT files, the teacher cache and any annotation
+# sheet all carry the post text verbatim, so none of them belong in a
+# repository. What is tracked instead is the code that produces them, the
+# label-only gold set, and the run metrics.
+# ---------------------------------------------------------------------------
+
+# The corpus itself, wherever it is mounted
+data/corpus/
+data/*.csv
+data/sft/
+data/teacher_cache.json
+data/teacher_labels*.csv
+data/sample_manifest.json
+
+# Annotation sheets: these hold the post text alongside the labels
+data/gold/*
+!data/gold/gold_blind.csv
+!data/gold/gold_blind_sources.csv
+
+# Tracked on purpose: a synthetic corpus so the pipeline runs with no real data
+!data/examples/
+!data/examples/*
+
+# Tracked on purpose: the redaction word list is a vocabulary, not text
+!data/corpus_lowercase_words.json
+
+# Adapter weights: 126 MB, over GitHub's 100 MB per-file limit. Reproduce with
+# `python train.py`; the metrics and eval JSON next to them are tracked.
+runs/**/adapter/
+runs/**/checkpoint-*/
+*.safetensors
+*.bin
+*.gguf
+
+# Generated prompt artifacts. system.txt is tracked as the teacher prompt of
+# record; the other two quote real posts and real cost figures.
+prompts/sample_calls.txt
+prompts/exposure_report.txt
+
+# Secrets
+.env
+*.key
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.bak

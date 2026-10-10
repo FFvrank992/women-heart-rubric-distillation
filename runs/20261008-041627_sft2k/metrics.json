@@ -1,0 +1,49 @@
+{
+  "model": "Qwen/Qwen3-4B-Instruct-2507",
+  "tag": "sft2k",
+  "train_rows": 1919,
+  "val_rows": 292,
+  "epochs": 3.0,
+  "steps": 2877,
+  "batch_size": 2,
+  "grad_accum": 8,
+  "lr": 0.0002,
+  "lora_r": 16,
+  "seq_len": 1024,
+  "fields": [
+    "speech_act",
+    "emotion",
+    "care_experience",
+    "subject",
+    "health_claim",
+    "womens_specific"
+  ],
+  "peak_gib": 6.16,
+  "minutes": 105.9,
+  "val_loss_history": [
+    {
+      "step": 500,
+      "val_loss": 0.0525
+    },
+    {
+      "step": 1000,
+      "val_loss": 0.0415
+    },
+    {
+      "step": 1500,
+      "val_loss": 0.0407
+    },
+    {
+      "step": 2000,
+      "val_loss": 0.0385
+    },
+    {
+      "step": 2500,
+      "val_loss": 0.0409
+    },
+    {
+      "step": 2877,
+      "val_loss": 0.0406
+    }
+  ]
+}

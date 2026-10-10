@@ -1,0 +1,15 @@
+# Annotation, agreement and dataset building. Nothing here needs a GPU.
+#
+# The training and evaluation stages need `requirements-train.txt` on top of
+# this, and a CUDA build of torch.
+
+pandas==3.0.6
+scikit-learn==1.9.1
+
+# Teacher annotation. Only `teacher.py --provider gemini` imports it, so the
+# rest of the pipeline runs without it.
+google-genai==2.25.0
+
+# Optional: a second teacher for the disagreement routing in `verify.py`
+# (`teacher.py --provider anthropic`).
+# anthropic
